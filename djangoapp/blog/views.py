@@ -20,7 +20,6 @@ class PostListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context.update({
             'page_title': 'Home - ',
         })
@@ -29,7 +28,6 @@ class PostListView(ListView):
 
 def created_by(request, author_pk):
     user = User.objects.filter(pk=author_pk).first()
-
     if user is None:
         raise Http404()
     posts = Post.objects.get_published()\
@@ -60,15 +58,12 @@ class CreatedByListView(PostListView):
         ctx = super().get_context_data(**kwargs)
         user = self._temp_context['user']
         user_full_name = user.username
-
         if user.first_name:
             user_full_name = f'{user.first_name} {user.last_name}'
         page_title = 'Posts de ' + user_full_name + ' - '
-
         ctx.update({
             'page_title': page_title,
         })
-
         return ctx
 
     def get_queryset(self) -> QuerySet[Any]:
@@ -79,16 +74,33 @@ class CreatedByListView(PostListView):
     def get(self, request, *args, **kwargs):
         author_pk = self.kwargs.get('author_pk')
         user = User.objects.filter(pk=author_pk).first()
-
         if user is None:
             raise Http404()
-
         self._temp_context.update({
             'author_pk': author_pk,
             'user': user,
         })
-
         return super().get(request, *args, **kwargs)
+
+
+class CategoryListView(PostListView):
+    allow_empty = False
+
+    def get_queryset(self) -> QuerySet[Any]:
+        return super().get_queryset().filter(
+            category__slug=self.kwargs.get('slug')
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        page_title = (
+            f'{self.object_list[0].category.name}'  # type: ignore
+            ' - Categoria - '
+        )
+        ctx.update({
+            'page_title': page_title,
+        })
+        return ctx
 
 
 def category(request, slug):
