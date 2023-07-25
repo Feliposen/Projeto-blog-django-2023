@@ -23,7 +23,7 @@
   /* Font-family */
   --ff-regular: Georgia, 'Times New Roman', Times, serif;
   --ff-headings: Georgia, 'Times New Roman', Times, serif;
-  --ff-mono: 'Courier New', Courier, monospace;
+  --ff-mono: monospace;
   /* Font-Sizes */
   /* https://royalfig.github.io/fluid-typography-calculator/ */
   --fs-smlst: clamp(1.2rem, 1.092307692307692rem + 0.256410256410256vw, 1.4rem);
@@ -119,7 +119,7 @@ pre {
   max-width: 100%;
   overflow-x: auto;
   line-height: var(--lh-mono);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-smlr);
 }
 pre,
 code {
@@ -131,11 +131,14 @@ input[type='search']::-webkit-search-results-button,
 input[type='search']::-webkit-search-results-decoration {
   -webkit-appearance: none;
 }
-
 img {
   margin: 0 auto;
 }
-
+/* CodeMirror */
+.CodeMirror {
+  height: auto !important;
+  font-size: var(--fs-smlr) !important;
+}
 /* Blog */
 body,
 html,
@@ -167,6 +170,11 @@ html,
 .pb-base {
   padding-bottom: var(--spacing-base);
 }
+
+.mt-base {
+  margin-top: var(--spacing-base);
+}
+
 .center {
   text-align: center;
 }
@@ -398,4 +406,3 @@ html,
 }
 .card-action-link:hover {
   text-decoration: none;
-}
